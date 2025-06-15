@@ -1,0 +1,16 @@
+apiVersion: v2
+name: user-service
+description: User Service for the Distributed E-Commerce Platform
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - ecommerce
+  - user
+  - authentication
+home: https://github.com/your-org/regorp
+sources:
+  - https://github.com/your-org/regorp
+maintainers:
+  - name: Your Name
+    email: your.email@example.com
