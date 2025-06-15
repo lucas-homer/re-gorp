@@ -1,0 +1,17 @@
+replicaCount: 1
+image:
+  repository: 172.22.0.7:5001/ecommerce/api-gateway
+  tag: "latest"
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 9080
+env:
+  NODE_ENV: development
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

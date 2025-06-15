@@ -1,0 +1,74 @@
+# Development values for User Service
+replicaCount: 1
+
+image:
+  repository: 172.22.0.7:5001/ecommerce/user-service
+  tag: "latest"
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  NODE_ENV: development
+  PORT: 3000
+  DATABASE_URL: "postgresql://regorp:regorp123@postgres:5432/regorp"
+  REDIS_URL: "redis://redis:6379"
+  JWT_SECRET: "dev-jwt-secret-key"
+
+secrets: {}
+
+configMap:
+  LOG_LEVEL: "debug"
+  METRICS_PORT: "9090"
+
+healthCheck:
+  enabled: true
+  path: /health
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+livenessProbe:
+  enabled: false
+
+readinessProbe:
+  enabled: false

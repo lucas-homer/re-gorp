@@ -1,0 +1,22 @@
+replicaCount: 1
+image:
+  repository: 172.22.0.7:5001/ecommerce/payment-service
+  tag: "latest"
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 3000
+env:
+  NODE_ENV: development
+  PORT: 3000
+  DATABASE_URL: "postgresql://regorp:regorp123@postgres:5432/regorp"
+  REDIS_URL: "redis://redis:6379"
+configMap:
+  LOG_LEVEL: "debug"
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

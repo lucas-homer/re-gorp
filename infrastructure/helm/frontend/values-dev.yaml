@@ -1,0 +1,17 @@
+replicaCount: 1
+image:
+  repository: 172.22.0.7:5001/ecommerce/frontend
+  tag: "latest"
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 3000
+env:
+  REACT_APP_API_URL: "http://localhost:9080"
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
