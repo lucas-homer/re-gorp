@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: 172.22.0.7:5001/ecommerce/frontend
+  repository: regorp-registry:5000/regorp/frontend
   tag: "latest"
   pullPolicy: Always
 service:

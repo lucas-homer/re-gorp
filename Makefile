@@ -24,9 +24,11 @@ help:
 
 # Create development cluster
 dev-cluster:
+	@echo "Creating image registry..."
+	ctlptl create registry regorp-registry --port=5000
 	@echo "Creating k3d development cluster..."
-	k3d cluster create ecommerce-dev \
-		--registry-create ecommerce-registry:5000 \
+	ctlptl create cluster k3d \
+		--registry regorp-registry:5000 \
 		--agents 2 \
 		--port "8080:80@loadbalancer"
 	@echo "Development cluster ready!"
