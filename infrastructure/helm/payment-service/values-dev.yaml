@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: 172.22.0.7:5001/ecommerce/payment-service
+  repository: regorp-registry:5000/regorp/payment-service
   tag: "latest"
   pullPolicy: Always
 service:

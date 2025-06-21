@@ -3,8 +3,8 @@
 
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
 
-# Use k3d local registry - use IP address accessible from within cluster
-default_registry('172.22.0.7:5001')
+# Use k3d local registry - use hostname that k3d provides
+default_registry('regorp-registry:5000')
 
 # Add Helm repositories
 helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
@@ -24,14 +24,15 @@ helm_resource('postgres',
   port_forwards='5432:5432')
 
 # API Gateway
-helm_resource('api-gateway',
-  chart='./helm/api-gateway',
-  flags=['--values', './helm/api-gateway/values-dev.yaml'],
-  resource_deps=['redis'],
-  port_forwards='9080:9080')
+# helm_resource('api-gateway',
+#   chart='bitnami/apisix',
+#   # flags=['--values', './helm/api-gateway/values-dev.yaml'],
+#   resource_deps=['redis', 'postgres'],
+#   port_forwards='9080:9080'
+#   )
 
 # Microservices with live updates
-docker_build('ecommerce/user-service',
+docker_build('regorp/user-service',
   './services/user-service',
   live_update=[
     sync('./services/user-service/src', '/app/src'),
@@ -39,12 +40,12 @@ docker_build('ecommerce/user-service',
   ])
 
 helm_resource('user-service',
-  chart='./helm/user-service',
-  flags=['--values', './helm/user-service/values-dev.yaml'],
+  chart='./infrastructure/helm/user-service',
+  flags=['--values', './infrastructure/helm/user-service/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='3001:3000')
 
-docker_build('ecommerce/catalog-service',
+docker_build('regorp/catalog-service',
   './services/catalog-service',
   live_update=[
     sync('./services/catalog-service/src', '/app/src'),
@@ -52,12 +53,12 @@ docker_build('ecommerce/catalog-service',
   ])
 
 helm_resource('catalog-service',
-  chart='./helm/catalog-service',
-  flags=['--values', './helm/catalog-service/values-dev.yaml'],
+  chart='./infrastructure/helm/catalog-service',
+  flags=['--values', './infrastructure/helm/catalog-service/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='3002:3000')
 
-docker_build('ecommerce/inventory-service',
+docker_build('regorp/inventory-service',
   './services/inventory-service',
   live_update=[
     sync('./services/inventory-service/src', '/app/src'),
@@ -65,12 +66,12 @@ docker_build('ecommerce/inventory-service',
   ])
 
 helm_resource('inventory-service',
-  chart='./helm/inventory-service',
-  flags=['--values', './helm/inventory-service/values-dev.yaml'],
+  chart='./infrastructure/helm/inventory-service',
+  flags=['--values', './infrastructure/helm/inventory-service/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='3003:3000')
 
-docker_build('ecommerce/order-service',
+docker_build('regorp/order-service',
   './services/order-service',
   live_update=[
     sync('./services/order-service/src', '/app/src'),
@@ -78,12 +79,12 @@ docker_build('ecommerce/order-service',
   ])
 
 helm_resource('order-service',
-  chart='./helm/order-service',
-  flags=['--values', './helm/order-service/values-dev.yaml'],
+  chart='./infrastructure/helm/order-service',
+  flags=['--values', './infrastructure/helm/order-service/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='3004:3000')
 
-docker_build('ecommerce/payment-service',
+docker_build('regorp/payment-service',
   './services/payment-service',
   live_update=[
     sync('./services/payment-service/src', '/app/src'),
@@ -91,12 +92,12 @@ docker_build('ecommerce/payment-service',
   ])
 
 helm_resource('payment-service',
-  chart='./helm/payment-service',
-  flags=['--values', './helm/payment-service/values-dev.yaml'],
+  chart='./infrastructure/helm/payment-service',
+  flags=['--values', './infrastructure/helm/payment-service/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='3005:3000')
 
-docker_build('ecommerce/notification-service',
+docker_build('regorp/notification-service',
   './services/notification-service',
   live_update=[
     sync('./services/notification-service/src', '/app/src'),
@@ -104,13 +105,13 @@ docker_build('ecommerce/notification-service',
   ])
 
 helm_resource('notification-service',
-  chart='./helm/notification-service',
-  flags=['--values', './helm/notification-service/values-dev.yaml'],
+  chart='./infrastructure/helm/notification-service',
+  flags=['--values', './infrastructure/helm/notification-service/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='3006:3000')
 
 # Frontend
-docker_build('ecommerce/frontend',
+docker_build('regorp/frontend',
   './frontend',
   live_update=[
     sync('./frontend/src', '/app/src'),
@@ -119,15 +120,15 @@ docker_build('ecommerce/frontend',
   ])
 
 helm_resource('frontend',
-  chart='./helm/frontend',
-  flags=['--values', './helm/frontend/values-dev.yaml'],
+  chart='./infrastructure/helm/frontend',
+  flags=['--values', './infrastructure/helm/frontend/values-dev.yaml'],
   resource_deps=['api-gateway'],
   port_forwards='3000:3000')
 
 # Monitoring stack
 helm_resource('monitoring',
   chart='prometheus-community/kube-prometheus-stack',
-  flags=['--values', './monitoring/values-dev.yaml'],
+  # flags=['--values', './monitoring/values-dev.yaml'],
   resource_deps=[],
   port_forwards='3001:3000')  # Grafana
 

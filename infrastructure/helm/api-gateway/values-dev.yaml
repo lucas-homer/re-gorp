@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: 172.22.0.7:5001/ecommerce/api-gateway
+  repository: regorp-registry:5000/regorp/api-gateway
   tag: "latest"
   pullPolicy: Always
 service:
