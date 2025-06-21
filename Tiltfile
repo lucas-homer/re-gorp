@@ -113,7 +113,7 @@ helm_resource('notification-service',
 docker_build('ecommerce/frontend',
   './frontend',
   live_update=[
-    sync('./frontend/src', '/app/src'),
+    sync('./frontend/app', '/app/app'),
     sync('./frontend/public', '/app/public'),
     restart_container(),
   ])
