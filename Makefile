@@ -24,13 +24,8 @@ help:
 
 # Create development cluster
 dev-cluster:
-	@echo "Creating image registry..."
-	ctlptl create registry regorp-registry --port=5000
-	@echo "Creating k3d development cluster..."
-	ctlptl create cluster k3d \
-		--registry regorp-registry:5000 \
-		--agents 2 \
-		--port "8080:80@loadbalancer"
+	@echo "Creating image registry and k3d cluster..."
+	k3d cluster create regorp-dev --registry-create regorp-registry.localhost:56414 --registry-config "./infrastructure/registries.yaml"
 	@echo "Development cluster ready!"
 
 # Start development environment with Tilt
@@ -54,7 +49,7 @@ deploy:
 # Clean up development environment
 clean:
 	@echo "Cleaning up development environment..."
-	k3d cluster delete ecommerce-dev
+	k3d cluster delete regorp-dev
 	docker system prune -f
 	@echo "Cleanup complete!"
 

@@ -1,0 +1,4 @@
+mirrors:
+  "k3d-regorp-registry.localhost:56414":
+    endpoint:
+      - http://k3d-regorp-registry.localhost:56414

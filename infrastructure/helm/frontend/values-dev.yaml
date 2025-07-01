@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: regorp-registry:5000/regorp/frontend
+  repository: k3d-regorp-registry.localhost:56414/frontend
   tag: "latest"
   pullPolicy: Always
 service:
