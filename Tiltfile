@@ -10,6 +10,8 @@ default_registry('k3d-regorp-registry.localhost:56414')
 # Add Helm repositories
 helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
 helm_repo('prometheus-community', 'https://prometheus-community.github.io/helm-charts')
+helm_repo('apisix', 'https://charts.apiseven.com/')
+
 
 # Infrastructure services
 helm_resource('redis',
@@ -26,7 +28,7 @@ helm_resource('postgres',
 
 # API Gateway
 helm_resource('api-gateway',
-  chart='bitnami/apisix',
+  'apisix/apisix',
   # flags=['--values', './infrastructure/helm/api-gateway/values-dev.yaml'],
   resource_deps=['redis', 'postgres'],
   port_forwards='9080:9080'
@@ -111,6 +113,7 @@ helm_resource('api-gateway',
 #   resource_deps=['redis', 'postgres'],
 #   port_forwards='3006:3000')
 
+
 # Frontend
 docker_build_with_restart('k3d-regorp-registry.localhost:56414/frontend',
   './frontend',
@@ -127,11 +130,11 @@ k8s_yaml(helm('./infrastructure/helm/frontend', name="frontend", values="./infra
 k8s_resource('frontend', port_forwards='3000:3000', resource_deps=['api-gateway'])
 
 # Monitoring stack
-helm_resource('monitoring',
+helm_resource('prometheus',
   chart='prometheus-community/kube-prometheus-stack',
   # flags=['--values', './monitoring/values-dev.yaml'],
   # resource_deps=[],
-  )  # Grafana
+  )
 
 # Development utilities
 # local_resource('logs',

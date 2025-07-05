@@ -1,0 +1,13 @@
+# Example terraform.tfvars file for production ARC GitHub App configuration
+# Copy this file to terraform.tfvars and fill in your actual values
+
+# GitHub App credentials (get these from your GitHub App settings)
+github_app_id              = "123456"
+github_app_installation_id = "12345678"
+github_app_private_key     = <<EOF
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA...
+...your private key content here...
+...
+-----END RSA PRIVATE KEY-----
+EOF
